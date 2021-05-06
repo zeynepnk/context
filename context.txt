@@ -1,0 +1,286 @@
+Adim 1. Github sayfamizda context isimli yeni repository olusturiyoruz
+Adim 2. Olsuturdigimiz context isimli repostoriyi masaustune clone ediyoruz 
+           cd desktop sonra desktopa gectikden sonra 
+        git clone _______ olsturdigimiz repository adresi
+Adim 3. Masa ustune aldigimiz context klasoruni VS  ile aciyoruz
+Adim 4. context isimli clasorune terminalde entegre oldukdan sonra npx create-react-app . kurulim yapiyoruz
+Adim 5 React kurulimi bitdikden sonra   src dosyasinin icerisine yen Context isimli  klasor aciyoruz
+Adim 6. src de Actigimiz Context isimli klasorunin icerisnide ThemeContext.js isimli dosya olustiriyoruz
+        ve icerisine su kodu yaziyoruz 
+
+       import React from "react";
+
+const ThemeContext = React.createContext("light");
+export default ThemeContext;
+
+
+Adim 7. App.js dosyasina gidip oradaki gereksiz headear kismini siliyoruz ve su sekilde kodlama yapiyoruz 
+
+function App() {
+  const theme = "light";
+  return (
+    <ThemeContext.Provider value = {theme}>
+      <div>
+      </div>
+    </ThemeContext.Provider>
+  );
+}
+------------------------------------------------------------------------------------------------------------------------------------------
+
+Adim 8.src klasorunin icerisnde Colors.js  isimli yeni bir dosya aciyoruz ve icersinde AppTheme isimli objemizi su sekilde olurturuyoruz
+
+
+const AppTheme = {
+    light: {
+        textColor: "#000",
+        backgroundColor: "#fff"
+    },
+    dark: {
+        textColor: "#fff",
+        backgroundColor: "#333"
+    }
+}
+
+export default AppTheme;
+----------------------------------------------------------------------------------------------------------------------------------------
+Adim 9. Simdide  Header ,ThemeToggler, MainWithClass isimli componentlerimizi olusturalim
+
+  src nin icerisnde  Header.jsx  isimli yeni dosya ve icerisinde su sekilde  kodlama yapalim
+
+import React from "react";
+import ThemeToggler from "./ThemeToggler";
+
+const headerStyles = {
+    padding: "1rem",
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center"
+}
+const Header = () => {
+    return(
+        <header style = {headerStyles}>
+            <h1>Context API</h1>
+            <ThemeToggler />
+        </header>
+    );
+}
+
+export default Header;
+
+---------------------------------------------------------------------------------------------------------------------------
+
+src nin icerisnde ThemeToggler.jsx  ismli yeni bir dosya ve icerisnde su kodlama su sekilde yapalim
+
+
+import React from "react";
+import ThemeContext from "../Context/ThemeContext";
+
+const themeTogglerStyle = {
+    cursor: "pointer"
+}
+const ThemeToggler = () => {
+        return(
+            <div style = {themeTogglerStyle}>
+            </div>
+    );
+}
+
+export default ThemeToggler;
+
+-----------------------------------------------------------------------------------------------------------------------------
+
+once islemi class context type olarak  gormek icin src nin icerisinde MainWithClass.jsx  isimli yeni bir dosya ve kodalama su sekilde 
+
+import React, { Component } from "react";
+import ThemeContext from "../Context/ThemeContext";
+import AppTheme from "../Colors";
+
+class Main extends Component {
+    constructor() {
+        super();
+        this.state = {
+        }
+    }
+    render(){
+               return(
+                    <ThemeContext.Consumer>
+                   {
+                    (theme) => {
+                        const currentTheme = AppTheme[theme];
+                        return(
+                            <main style = {{
+                                padding: "1rem",
+                                backgroundColor: `${currentTheme.backgroundColor}`,
+                                color: `${currentTheme.textColor}`,
+                            
+                            }}>
+                                <h1>Heading 1</h1>
+                                <p>This is a paragraph</p>
+                                <button> This is a button</button>
+                            </main>
+                        )
+                       
+                    }
+                }
+            </ThemeContext.Consumer>
+        );
+    }
+
+}
+
+
+
+----------------------------------------------------------------------------------------------------------------------------------------
+sonra islemi functionda gormek icin src icerisnde MainWithFunction.js   isimli yeni bir dosya olusturalim ve kodlama su sekilde 
+
+const Main = () => {
+    const theme = useContext(ThemeContext);
+    const currentTheme = AppTheme[theme];
+    return(
+        <main style = {{
+            padding: "1rem",
+            backgroundColor: `${currentTheme.backgroundColor}`,
+            color: `${currentTheme.textColor}`,
+        
+        }}>
+            <h1>Heading 1</h1>
+            <p>This is a paragraph</p>
+            <button> This is a button</button>
+        </main>
+    );
+}
+
+export default Main;
+---------------------------------------------------------------------------------------------------------------------------------
+
+Sonra daha once olusturdimiz ThemeContext.js  icerisni su sekilde guncelleme  yapalim 
+
+const ThemeContext = React.createContext(["light", () => {}]);
+
+------------------------------------------------------------------------------------------------------------------------------
+Simdi bunlari  App.js  import etme zamani  yani App.js dosyasinin son hali soyle 
+
+import React, { useState } from "react";
+import ThemeContext from "./Context/ThemeContext";
+import Header from "./Header";
+import Main from "./MainWithFunction";
+import MainWithClass from "./MainWithClass";
+
+function App() {
+  const themeHook = useState("light");
+  return (
+    <ThemeContext.Provider value={themeHook}>
+      <div>
+        <Header />
+        <Main />
+        <MainWithClass />
+      </div>
+    </ThemeContext.Provider>
+  );
+}
+
+export default App;
+
+----------------------------------------------------------------------------------------------------------------------------
+
+simdide daha once olsuturdigimiz ThemeToggler.jsx  isimli componenti su sekilde update edelim 
+
+buradaki import {FaArrowRight} from 'react-icons/fa' satiri ben kendim ekledim onuda npm install react-icons   sekilinde sayfaya install edilebilir bu sadece yon tusu iconu icin  lazim baska birsey lazim degil isterseniz ekelemeyedebilirsiniz.egerde ekleme yapmazsaniz import {FaArrowRight} from 'react-icons/fa' satirini birde asagda <FaArrowRight/>  kaldirabiliriz 
+
+ 
+
+
+import React,{useContext} from "react";
+import ThemeContext from "./Context/ThemeContext";
+import {FaArrowRight} from 'react-icons/fa'
+
+const themeTogglerStyle = {
+    cursor: "pointer"
+}
+const ThemeToggler = () => {
+    const[themeMode, setThemeMode] = useContext(ThemeContext);
+    return(
+        <div style = {themeTogglerStyle} onClick = {() => {setThemeMode(themeMode === "light"? "dark": "light")}}>
+            <span title = "switch theme">
+            <h2>Theme Mode</h2>Click <FaArrowRight/>   {themeMode === "light" ? "🌙" : "☀️" } 
+            </span>
+        </div>
+    );
+}
+
+export default ThemeToggler;
+
+------------------------------------------------------------------------------------------------------------------------------------
+simdi ise MainWithClass  componentimizde bazi degsiklikler yapalim yani en son hali su sekilde olacak 
+
+import React, { Component } from "react";
+import ThemeContext from "./Context/ThemeContext";
+import AppTheme from "./Colors";
+
+class Main extends Component {
+    constructor() {
+        super();
+        this.state = {}
+    }
+    render() {
+        return (
+            <ThemeContext.Consumer>
+                {
+                    ([theme]) => {
+                        const currentTheme = AppTheme[theme];
+                        return(
+                            <main style = {{
+                                padding: "1rem",
+                                backgroundColor: `${currentTheme.backgroundColor}`,
+                                color: `${currentTheme.textColor}`,
+                            
+                            }}>
+                                <h1>Main With Class</h1>
+                                <p>This is a paragraph with Class</p>
+                                
+                            </main>
+                        )
+                       
+                    }
+                }
+            </ThemeContext.Consumer>
+        );
+    }
+
+}
+export default Main;
+-------------------------------------------------------------------------------------------------------------------------------
+
+son olarak MainWithFunction  componentimizdede degisikliller  yapiyoruz son olarak oda su sekil olacak 
+
+import React,{ useContext} from 'react';
+import ThemeContext from './Context/ThemeContext'
+import AppTheme from './Colors'
+
+
+
+const Main = () => {
+    const theme = useContext(ThemeContext)[0];
+    const currentTheme = AppTheme[theme];
+    return(
+        <main style = {{
+            padding: "1rem",
+            backgroundColor: `${currentTheme.backgroundColor}`,
+            color: `${currentTheme.textColor}`,        
+        }}>
+            <h1>Main With Function</h1>
+            <p>This is a paragraph </p>
+            
+        </main>
+    );
+}
+
+export default Main;
+
+
+----------------------------------------------------------------------------------------
+npm start ile projeyi ayaga kaldiralim ve bakalim 
+
+
+
+

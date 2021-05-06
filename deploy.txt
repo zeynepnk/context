@@ -1,0 +1,41 @@
+Gtihuba sayfayi deploy etmek icin adimlar  
+
+
+1. Proje dosyasina terminalde entegre oldukdan sonra su sekilde kurulum yapalim
+
+
+npm install gh-pages  --save-dev
+
+2 kurulum bitdikden sonra package.json  icerisnde  en ust kisimda yanni proje isminin ustunde 
+
+"homepage": github adimiz/github.io/proje adimiz seklinde yazalim
+orenk :   "homepage": "http://arazmurat.github.io/context",
+
+3.yinede asagida  yani package.json  icerisinde "scripts": kismine su iki satiri ekeleyelim 
+
+ "predeploy":"npm run build",
+
+ "deploy":"gh-pages -d build",
+
+4. sonra terminalde su komutlari yazalim 
+
+git add .
+git commit -m "commitimiz yani ne degisiklik yaptiysak  tarifi"
+--------------------------------------------------------------------------
+sonra ise 
+
+npm run deploy komutunu calistiralim
+
+islem bitdikden sonra sayfaniz published yapildi sekilnde yazar
+---------------------------------------------------------------------------
+en son olarakda tumunu 
+git push
+
+ ile githuba yollayalim 
+-----------------------------------------------------------------------------------------------------
+sonra  githubda repositorimizin ayarlar kismina basip sayfa acildikdan sonra  asaga dogru ilerlersek GitHub Pages  kismi var  orada 
+bizim projenin publish linki var, linki kopyalayip nereye gondermek istorsak o linki verebiliriz 
+
+
+
+
